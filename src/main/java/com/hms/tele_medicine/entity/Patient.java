@@ -28,4 +28,6 @@ public class Patient {
     @Email
     @Column(unique = true)
     private String email;
+
+    private String password;
 }

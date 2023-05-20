@@ -2,10 +2,13 @@ package com.hms.tele_medicine.service;
 
 import com.hms.tele_medicine.contracts.authentication.LoginRequest;
 import com.hms.tele_medicine.contracts.authentication.RegisterDoctorRequest;
+import com.hms.tele_medicine.contracts.authentication.RegisterPatientRequest;
 import com.hms.tele_medicine.entity.Doctor;
+import com.hms.tele_medicine.entity.Patient;
 import com.hms.tele_medicine.entity.Qualification;
 import com.hms.tele_medicine.entity.Specialization;
 import com.hms.tele_medicine.repository.DoctorRepository;
+import com.hms.tele_medicine.repository.PatientRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,14 +21,17 @@ import java.util.concurrent.CompletionStage;
 @Slf4j
 public class AuthenticationService {
     private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
     private final QualificationService qualificationService;
     private final SpecializationService specializationService;
 
     @Autowired
     public AuthenticationService(DoctorRepository doctorRepository,
+                                 PatientRepository patientRepository,
                                  QualificationService qualificationService,
                                  SpecializationService specializationService) {
         this.doctorRepository = doctorRepository;
+        this.patientRepository = patientRepository;
         this.qualificationService = qualificationService;
         this.specializationService = specializationService;
     }
@@ -61,7 +67,19 @@ public class AuthenticationService {
     public CompletionStage<Doctor> loginDoctor(LoginRequest loginRequest) {
         log.info("Logging in doctor...");
         return CompletableFuture.completedFuture(doctorRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword())
-                .orElseThrow(() -> new RuntimeException("No user present with the provided credentials!")));
+                .orElseThrow(() -> new RuntimeException("No doctor present with the provided credentials!")));
+    }
+
+    public CompletionStage<Patient> registerPatient(RegisterPatientRequest registerPatientRequest) {
+        log.info("Registering patient...");
+        return CompletableFuture.completedFuture(getPatient(registerPatientRequest))
+                .thenApply(patientRepository::save);
+    }
+
+    public CompletionStage<Patient> loginPatient(LoginRequest loginRequest) {
+        log.info("Logging in patient...");
+        return CompletableFuture.completedFuture(patientRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword())
+                .orElseThrow(() -> new RuntimeException("No patient present with the provided credentials!")));
     }
 
     private Doctor getDoctor(RegisterDoctorRequest registerDoctorRequest) {
@@ -74,6 +92,16 @@ public class AuthenticationService {
                 .password(registerDoctorRequest.getPassword())
                 .qualifications(registerDoctorRequest.getQualifications())
                 .specialisations(registerDoctorRequest.getSpecializations())
+                .build();
+    }
+
+    private Patient getPatient(RegisterPatientRequest registerPatientRequest) {
+        return Patient.builder()
+                .firstName(registerPatientRequest.getFirstName())
+                .lastName(registerPatientRequest.getLastName())
+                .email(registerPatientRequest.getEmail())
+                .phoneNo(registerPatientRequest.getPhoneNo())
+                .password(registerPatientRequest.getPassword())
                 .build();
     }
 }
