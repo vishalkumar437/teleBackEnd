@@ -1,0 +1,41 @@
+Register Doctor
+
+POST: http://localhost:9091/authenticate/doctor/register
+
+{
+    "firstName": "fname",
+    "lastName": "lname",
+    "email": "doc7@gmail.com",
+    "phoneNo": "1234567897",
+    "password": "pass",
+    "practicingFrom": 2022,
+    "qualifications": [
+        {
+            "qualificationName": "MBBS",
+            "instituteName": "AIIMS",
+            "passingYear": 2020
+        },
+        {
+            "qualificationName": "MBBS 2",
+            "instituteName": "AIIMS 2",
+            "passingYear": 2020
+        }
+    ],
+    "specializations": [
+        {
+            "specializationName": "Surgery"
+        },
+        {
+            "specializationName": "MRI"
+        }
+    ]
+}
+
+Login Doctor
+
+POST: http://localhost:9091/authenticate/doctor/login
+
+{
+    "email": "doc1@gmail.com",
+    "password": "pass"
+}
