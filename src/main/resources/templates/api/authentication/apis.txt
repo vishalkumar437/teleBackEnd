@@ -39,3 +39,23 @@ POST: http://localhost:9091/authenticate/doctor/login
     "email": "doc1@gmail.com",
     "password": "pass"
 }
+
+Register Patient
+
+POST: http://localhost:9091/authenticate/patient/register
+
+{
+    "firstName": "user01",
+    "lastName": "user01",
+    "email": "user01@gmail.com",
+    "phoneNo": "9876543210",
+    "password": "xyz"
+}
+
+Login Patient
+
+POST: http://localhost:9091/authenticate/patient/login
+{
+    "email":"user01@gmail.com",
+    "password": "xyz"
+}
