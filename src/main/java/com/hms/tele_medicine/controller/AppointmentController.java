@@ -2,6 +2,8 @@ package com.hms.tele_medicine.controller;
 
 import com.hms.tele_medicine.contracts.appointment.ScheduleAppointmentRequest;
 import com.hms.tele_medicine.entity.Appointment;
+import com.hms.tele_medicine.entity.Doctor;
+import com.hms.tele_medicine.entity.Symptom;
 import com.hms.tele_medicine.service.AppointmentService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +50,20 @@ public class AppointmentController {
     public CompletionStage<ResponseEntity<Appointment>> acceptAppointment(@PathVariable Long appointmentId) {
         log.info("Received request to accept appointment: " + appointmentId);
         return appointmentService.acceptAppointment(appointmentId)
+                .thenApply(ResponseEntity::ok);
+    }
+
+    @GetMapping("/doctor/get-all")
+    public CompletionStage<ResponseEntity<List<Doctor>>> getAlDoctors() {
+        log.info("Received request to get all the doctors");
+        return appointmentService.getAllDoctors()
+                .thenApply(ResponseEntity::ok);
+    }
+
+    @GetMapping("/symptoms/get-all")
+    public CompletionStage<ResponseEntity<List<Symptom>>> getAllSymptoms() {
+        log.info("Received request to get all the symptoms");
+        return appointmentService.getAllSymptoms()
                 .thenApply(ResponseEntity::ok);
     }
 }

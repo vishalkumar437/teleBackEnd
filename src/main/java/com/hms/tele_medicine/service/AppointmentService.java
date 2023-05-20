@@ -2,7 +2,11 @@ package com.hms.tele_medicine.service;
 
 import com.hms.tele_medicine.contracts.appointment.ScheduleAppointmentRequest;
 import com.hms.tele_medicine.entity.Appointment;
+import com.hms.tele_medicine.entity.Doctor;
+import com.hms.tele_medicine.entity.Symptom;
 import com.hms.tele_medicine.repository.AppointmentRepository;
+import com.hms.tele_medicine.repository.DoctorRepository;
+import com.hms.tele_medicine.repository.SymptomRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +21,16 @@ import java.util.concurrent.CompletionStage;
 @Slf4j
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
+    private final DoctorRepository doctorRepository;
+    private final SymptomRepository symptomRepository;
 
     @Autowired
-    public AppointmentService(AppointmentRepository appointmentRepository) {
+    public AppointmentService(AppointmentRepository appointmentRepository,
+                              DoctorRepository doctorRepository,
+                              SymptomRepository symptomRepository) {
         this.appointmentRepository = appointmentRepository;
+        this.doctorRepository = doctorRepository;
+        this.symptomRepository = symptomRepository;
     }
 
     public CompletionStage<List<Appointment>> getAllAppointments() {
@@ -48,6 +58,16 @@ public class AppointmentService {
                     return appointment;
                 })
                 .thenApply(appointmentRepository::save);
+    }
+
+    public CompletionStage<List<Doctor>> getAllDoctors() {
+        log.info("Fetching doctors");
+        return CompletableFuture.completedFuture(doctorRepository.findAll());
+    }
+
+    public CompletionStage<List<Symptom>> getAllSymptoms() {
+        log.info("Fetching symptoms");
+        return CompletableFuture.completedFuture(symptomRepository.findAll());
     }
 
     private Appointment getAppointment(ScheduleAppointmentRequest scheduleAppointmentRequest) {
