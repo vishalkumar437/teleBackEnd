@@ -25,6 +25,7 @@ public class AppointmentController {
 
     @GetMapping("/get-all")
     public CompletionStage<ResponseEntity<List<Appointment>>> getAll() {
+        log.info("Received request to get all the appointments");
         return appointmentService.getAllAppointments()
                 .thenApply(ResponseEntity::ok);
     }

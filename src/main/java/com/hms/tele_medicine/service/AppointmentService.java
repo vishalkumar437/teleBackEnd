@@ -24,6 +24,7 @@ public class AppointmentService {
     }
 
     public CompletionStage<List<Appointment>> getAllAppointments() {
+        log.info("Fetching appointments...");
         return CompletableFuture.completedFuture(appointmentRepository.findAll());
     }
 
