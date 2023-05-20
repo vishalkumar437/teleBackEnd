@@ -30,10 +30,24 @@ public class AppointmentController {
                 .thenApply(ResponseEntity::ok);
     }
 
+    @GetMapping("/get-pending/{doctorId}")
+    public CompletionStage<ResponseEntity<List<Appointment>>> getPendingAppointmentsOfDoctor(@PathVariable Long doctorId) {
+        log.info("Received request to get pending request of doctor: " + doctorId);
+        return appointmentService.getPendingAppointmentsOfDoctor(doctorId)
+                .thenApply(ResponseEntity::ok);
+    }
+
     @PostMapping("/schedule")
     public CompletionStage<ResponseEntity<Appointment>> scheduleAppointment(@RequestBody @Valid ScheduleAppointmentRequest scheduleAppointmentRequest) {
         log.info("Received request to schedule appointment: " + scheduleAppointmentRequest.toString());
         return appointmentService.scheduleAppointment(scheduleAppointmentRequest)
+                .thenApply(ResponseEntity::ok);
+    }
+
+    @GetMapping("/accept/{appointmentId}")
+    public CompletionStage<ResponseEntity<Appointment>> acceptAppointment(@PathVariable Long appointmentId) {
+        log.info("Received request to accept appointment: " + appointmentId);
+        return appointmentService.acceptAppointment(appointmentId)
                 .thenApply(ResponseEntity::ok);
     }
 }

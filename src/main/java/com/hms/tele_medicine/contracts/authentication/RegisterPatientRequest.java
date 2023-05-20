@@ -25,6 +25,13 @@ public class RegisterPatientRequest {
     private String phoneNo;
 
     @NotNull
+    private Integer age;
+
+    @NotNull
+    @NotBlank
+    private String gender;
+
+    @NotNull
     @NotBlank
     private String password;
 }

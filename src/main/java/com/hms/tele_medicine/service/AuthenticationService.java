@@ -101,6 +101,8 @@ public class AuthenticationService {
                 .lastName(registerPatientRequest.getLastName())
                 .email(registerPatientRequest.getEmail())
                 .phoneNo(registerPatientRequest.getPhoneNo())
+                .age(registerPatientRequest.getAge())
+                .gender(registerPatientRequest.getGender())
                 .password(registerPatientRequest.getPassword())
                 .build();
     }

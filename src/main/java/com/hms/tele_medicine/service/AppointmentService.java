@@ -28,9 +28,25 @@ public class AppointmentService {
         return CompletableFuture.completedFuture(appointmentRepository.findAll());
     }
 
+    public CompletionStage<List<Appointment>> getPendingAppointmentsOfDoctor(Long doctorId) {
+        log.info("Fetching appointments...");
+        return CompletableFuture.completedFuture(appointmentRepository.findByDoctorId(doctorId));
+    }
+
     public CompletionStage<Appointment> scheduleAppointment(ScheduleAppointmentRequest scheduleAppointmentRequest) {
         log.info("Scheduling appointment...");
         return CompletableFuture.completedFuture(getAppointment(scheduleAppointmentRequest))
+                .thenApply(appointmentRepository::save);
+    }
+
+    public CompletionStage<Appointment> acceptAppointment(Long appointmentId) {
+        log.info("Accepting appointment: ");
+        return CompletableFuture.completedFuture(appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException(("No appointment found!"))))
+                .thenApply(appointment -> {
+                    appointment.setAppointmentStatus(true);
+                    return appointment;
+                })
                 .thenApply(appointmentRepository::save);
     }
 
